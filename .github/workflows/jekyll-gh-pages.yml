@@ -1,315 +1,470 @@
-<!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Elite VPN</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite — обходит все глушилки</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  body {
-    min-height: 100vh;
-    background: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #000 70%);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 30px 20px;
-    overflow: hidden;
-    position: relative;
-  }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #3b2a1c;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            padding: 20px;
+            background-image: radial-gradient(circle at 20% 30%, #5a3f2b 0%, #2e1f14 90%);
+        }
 
-  /* Кружок с логотипом */
-  .logo-circle {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, #2a2a2a, #000);
-    border: 3px solid #d4af37;
-    box-shadow:
-      0 0 25px rgba(212, 175, 55, 0.6),
-      0 0 60px rgba(212, 175, 55, 0.3),
-      inset 0 0 30px rgba(212, 175, 55, 0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 25px;
-    animation: pulse 3s ease-in-out infinite;
-  }
+        .container {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            padding: 30px 20px;
+            border-radius: 60px 60px 40px 40px;
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(2px);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.6), inset 0 1px 4px rgba(255, 215, 0, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.25);
+        }
 
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 25px rgba(212,175,55,0.6), 0 0 60px rgba(212,175,55,0.3); }
-    50%      { box-shadow: 0 0 40px rgba(212,175,55,0.9), 0 0 90px rgba(212,175,55,0.5); }
-  }
+        .elite-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
 
-  .logo-circle span {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    background: linear-gradient(135deg, #f5d76e, #d4af37, #b8860b);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-align: center;
-    line-height: 1.2;
-  }
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f5d742, #b8860b, #ffd966);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 0 3px #3b2a1c, 0 0 0 6px #d4af37, 0 8px 20px rgba(0,0,0,0.6);
+            transition: transform 0.2s ease;
+        }
 
-  /* Заголовок */
-  h1 {
-    font-size: 32px;
-    font-weight: 800;
-    background: linear-gradient(135deg, #f5d76e, #d4af37, #b8860b);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 8px;
-    text-align: center;
-  }
+        .avatar:hover {
+            transform: scale(1.02);
+        }
 
-  .subtitle {
-    color: #888;
-    font-size: 14px;
-    margin-bottom: 30px;
-    text-align: center;
-  }
+        .avatar span {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #3b2a1c;
+            text-shadow: 0 2px 2px #ffd966;
+            letter-spacing: 2px;
+        }
 
-  /* Летающие надписи */
-  .fly-zone {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 0;
-  }
+        .elite-text {
+            font-size: 5.5rem;
+            font-weight: 900;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #ffd966;
+            text-shadow: 
+                0 0 8px #ffb347,
+                0 0 20px #d4af37,
+                2px 4px 10px #000000,
+                0 0 40px #b8860b;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            line-height: 1;
+        }
 
-  .fly-text {
-    position: absolute;
-    color: #d4af37;
-    font-weight: 700;
-    font-size: 18px;
-    text-shadow: 0 0 10px rgba(212,175,55,0.8), 0 0 20px rgba(212,175,55,0.4);
-    white-space: nowrap;
-    animation: flyAcross linear infinite;
-    opacity: 0.85;
-  }
+        .bypass-area {
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
 
-  @keyframes flyAcross {
-    0%   { transform: translateX(-30vw) translateY(0); opacity: 0; }
-    10%  { opacity: 0.9; }
-    90%  { opacity: 0.9; }
-    100% { transform: translateX(130vw) translateY(-30px); opacity: 0; }
-  }
+        .bypass-text {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #e6c68a;
+            text-shadow: 0 2px 8px #1a0f07, 0 0 20px #7a5a2e;
+            cursor: pointer;
+            padding: 10px 28px;
+            border-radius: 50px;
+            background: rgba(70, 45, 25, 0.7);
+            border: 1px solid #b98f4b;
+            transition: all 0.25s ease;
+            box-shadow: 0 5px 0 #1e130b;
+            user-select: none;
+            letter-spacing: 1px;
+            backdrop-filter: blur(4px);
+        }
 
-  /* Кнопка */
-  .btn {
-    position: relative;
-    z-index: 2;
-    padding: 18px 50px;
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    color: #000;
-    background: linear-gradient(135deg, #f5d76e, #d4af37, #b8860b);
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    box-shadow: 0 8px 30px rgba(212,175,55,0.5);
-    transition: transform 0.2s, box-shadow 0.2s;
-    text-transform: uppercase;
-  }
+        .bypass-text:hover {
+            background: rgba(110, 75, 40, 0.9);
+            color: #fff0c0;
+            border-color: #ffd966;
+            box-shadow: 0 5px 0 #1e130b, 0 0 20px #d4af37;
+            transform: translateY(-1px);
+        }
 
-  .btn:active {
-    transform: scale(0.96);
-    box-shadow: 0 4px 15px rgba(212,175,55,0.7);
-  }
+        .bypass-text:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #1e130b;
+        }
 
-  /* Модальное окно */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(8px);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    padding: 20px;
-  }
+        .bypass-message {
+            margin-top: 18px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffecb3;
+            background: #2b1b0f;
+            padding: 14px 28px;
+            border-radius: 40px;
+            border-left: 8px solid #d4af37;
+            border-right: 8px solid #d4af37;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4), inset 0 0 15px #3f2b12;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+            max-width: 90%;
+            line-height: 1.4;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 5px black;
+        }
 
-  .modal-overlay.active { display: flex; }
+        .bypass-message.show {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
 
-  .modal {
-    background: linear-gradient(160deg, #1a1a1a, #0a0a0a);
-    border: 2px solid #d4af37;
-    border-radius: 24px;
-    padding: 30px 25px;
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    box-shadow: 0 0 60px rgba(212,175,55,0.4);
-    animation: popIn 0.3s ease;
-  }
+        .btn-subscribe {
+            background: linear-gradient(145deg, #f5d742, #b8860b);
+            border: none;
+            color: #1e140e;
+            font-weight: 900;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            padding: 18px 42px;
+            border-radius: 60px;
+            letter-spacing: 3px;
+            cursor: pointer;
+            box-shadow: 0 12px 0 #4d2e0e, 0 10px 25px black;
+            transition: all 0.1s ease;
+            font-family: 'Segoe UI', 'Arial Black', sans-serif;
+            margin-top: 20px;
+            border: 1px solid #fff3c9;
+            text-shadow: 0 1px 2px rgba(255,255,200,0.8);
+        }
 
-  @keyframes popIn {
-    from { transform: scale(0.85); opacity: 0; }
-    to   { transform: scale(1); opacity: 1; }
-  }
+        .btn-subscribe:hover {
+            background: linear-gradient(145deg, #ffe07a, #c99c2b);
+            box-shadow: 0 12px 0 #4d2e0e, 0 0 30px #ffd966;
+            transform: scale(1.01);
+        }
 
-  .modal h2 {
-    color: #d4af37;
-    font-size: 22px;
-    margin-bottom: 20px;
-  }
+        .btn-subscribe:active {
+            transform: translateY(8px);
+            box-shadow: 0 4px 0 #4d2e0e, 0 10px 20px black;
+        }
 
-  .link-box {
-    background: #000;
-    border: 1px solid #333;
-    border-radius: 12px;
-    padding: 14px;
-    font-size: 13px;
-    color: #d4af37;
-    word-break: break-all;
-    margin-bottom: 15px;
-    font-family: monospace;
-  }
+        /* Модальное окно */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
 
-  .copy-btn {
-    width: 100%;
-    padding: 16px;
-    font-size: 16px;
-    font-weight: 700;
-    color: #000;
-    background: linear-gradient(135deg, #f5d76e, #d4af37);
-    border: none;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: transform 0.15s;
-    text-transform: uppercase;
-  }
+        .modal-overlay.active {
+            display: flex;
+        }
 
-  .copy-btn:active { transform: scale(0.96); }
+        .modal-card {
+            background: linear-gradient(145deg, #4d3624, #2e1f14);
+            border-radius: 60px;
+            padding: 40px 30px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 0 0 2px #d4af37, 0 30px 50px black;
+            border: 1px solid #ffd966;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            position: relative;
+        }
 
-  .copy-btn.copied {
-    background: linear-gradient(135deg, #4ade80, #22c55e);
-  }
+        .modal-title {
+            color: #ffd966;
+            font-size: 2rem;
+            font-weight: 800;
+            text-shadow: 0 4px 8px black;
+            letter-spacing: 2px;
+            text-align: center;
+        }
 
-  .close-btn {
-    margin-top: 12px;
-    background: none;
-    border: none;
-    color: #666;
-    font-size: 14px;
-    cursor: pointer;
-  }
-</style>
+        .link-box {
+            background: #1f140c;
+            padding: 18px 22px;
+            border-radius: 50px;
+            width: 100%;
+            font-size: 1.25rem;
+            color: #e6c68a;
+            word-break: break-all;
+            border: 2px solid #b8860b;
+            box-shadow: inset 0 0 20px #000000;
+            font-family: monospace;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-copy {
+            background: #d4af37;
+            border: none;
+            color: #1e140e;
+            font-weight: 800;
+            font-size: 1.6rem;
+            padding: 18px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #6b4f1a, 0 8px 15px black;
+            transition: all 0.1s ease;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .btn-copy:active {
+            transform: translateY(5px);
+            box-shadow: 0 3px 0 #6b4f1a, 0 8px 15px black;
+        }
+
+        .btn-copy:hover {
+            background: #e6c35c;
+        }
+
+        .btn-close {
+            background: #6e4f2e;
+            border: none;
+            color: #f0e0b0;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 12px 32px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #2e1f14, 0 8px 15px black;
+            transition: all 0.1s ease;
+            letter-spacing: 1px;
+        }
+
+        .btn-close:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #2e1f14, 0 8px 15px black;
+        }
+
+        .btn-close:hover {
+            background: #8b653c;
+        }
+
+        .success-message {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #b9ff9b;
+            text-shadow: 0 0 15px #2ecc71, 0 0 30px #1e6b2e, 0 4px 8px black;
+            letter-spacing: 2px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            background: #1e3a1e;
+            padding: 12px 38px;
+            border-radius: 50px;
+            border: 2px solid #7ed957;
+            box-shadow: 0 0 30px #2ecc71;
+            pointer-events: none;
+        }
+
+        .success-message.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 600px) {
+            .elite-text {
+                font-size: 3.8rem;
+                letter-spacing: 4px;
+            }
+            .avatar {
+                width: 70px;
+                height: 70px;
+            }
+            .avatar span {
+                font-size: 2.4rem;
+            }
+            .bypass-text {
+                font-size: 1.3rem;
+                padding: 8px 18px;
+            }
+            .btn-subscribe {
+                font-size: 1.4rem;
+                padding: 14px 24px;
+                letter-spacing: 2px;
+            }
+            .modal-title {
+                font-size: 1.5rem;
+            }
+            .btn-copy {
+                font-size: 1.2rem;
+                padding: 14px 20px;
+            }
+            .link-box {
+                font-size: 1rem;
+                padding: 14px 16px;
+            }
+            .success-message {
+                font-size: 1.5rem;
+                padding: 10px 24px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Летающие надписи -->
-  <div class="fly-zone" id="flyZone"></div>
-
-  <!-- Логотип -->
-  <div class="logo-circle"><span>ELITE<br>VPN</span></div>
-
-  <h1>Elite VPN</h1>
-  <p class="subtitle">Быстро. Безопасно. Анонимно.</p>
-
-  <button class="btn" onclick="openModal()">Получить подписку</button>
-
-  <!-- Модальное окно -->
-  <div class="modal-overlay" id="modal">
-    <div class="modal">
-      <h2>🎉 Ваша подписка</h2>
-      <div class="link-box" id="linkText">https://plainraw.com/raw/11f3b65ff172</div>
-      <button class="copy-btn" id="copyBtn" onclick="copyLink()">📋 Скопировать ссылку</button>
-      <button class="close-btn" onclick="closeModal()">Закрыть</button>
+<div class="container">
+    <div class="elite-header">
+        <div class="avatar">
+            <span>⚡</span>
+        </div>
+        <div class="elite-text">Elite</div>
     </div>
-  </div>
+
+    <div class="bypass-area">
+        <div class="bypass-text" id="bypassTrigger">обходит все глушилки</div>
+    </div>
+
+    <div class="bypass-message" id="bypassMessage">
+        Не суда, А на получить подписку.
+    </div>
+
+    <button class="btn-subscribe" id="subscribeBtn">Получить подписку</button>
+</div>
+
+<!-- Модальное окно -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-card">
+        <div class="modal-title">🔗 ВАША ПОДПИСКА</div>
+        <div class="link-box" id="linkText">https://plainraw.com/raw/11f3b65ff172</div>
+        <button class="btn-copy" id="copyBtn">📋 Скопировать подписку</button>
+        <div class="success-message" id="successMsg">Успешно ✅</div>
+        <button class="btn-close" id="closeBtn">Закрыть</button>
+    </div>
+</div>
 
 <script>
-  /* ===== Летающие надписи ===== */
-  const flyZone = document.getElementById('flyZone');
+    (function() {
+        const bypassTrigger = document.getElementById('bypassTrigger');
+        const bypassMessage = document.getElementById('bypassMessage');
+        const subscribeBtn = document.getElementById('subscribeBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const copyBtn = document.getElementById('copyBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const successMsg = document.getElementById('successMsg');
 
-  const texts = [
-    '10 mbit/s',
-    'Много серверов',
-    '10 mbit/s',
-    'Без логов',
-    'Много серверов',
-    '10 mbit/s',
-    'Стабильно',
-    'Много серверов'
-  ];
+        const SUBSCRIPTION_URL = 'https://plainraw.com/raw/11f3b65ff172';
 
-  function createFlyText() {
-    const el = document.createElement('div');
-    el.className = 'fly-text';
-    el.textContent = texts[Math.floor(Math.random() * texts.length)];
-    el.style.top = (Math.random() * 90 + 5) + 'vh';
-    el.style.fontSize = (14 + Math.random() * 10) + 'px';
-    const duration = 8 + Math.random() * 8;
-    el.style.animationDuration = duration + 's';
-    el.style.animationDelay = (Math.random() * 2) + 's';
-    flyZone.appendChild(el);
+        // Клик по "обходит все глушилки" — toggle сообщения
+        bypassTrigger.addEventListener('click', function() {
+            bypassMessage.classList.toggle('show');
+        });
 
-    setTimeout(() => el.remove(), (duration + 2) * 1000);
-  }
+        // Открытие модального окна по кнопке "Получить подписку"
+        subscribeBtn.addEventListener('click', function() {
+            modalOverlay.classList.add('active');
+            successMsg.classList.remove('show');
+        });
 
-  // Запускаем постоянно
-  setInterval(createFlyText, 900);
-  // Стартовая пачка
-  for (let i = 0; i < 6; i++) setTimeout(createFlyText, i * 300);
+        // Закрытие модалки
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            successMsg.classList.remove('show');
+        }
 
-  /* ===== Модальное окно ===== */
-  const SUB_URL = 'https://plainraw.com/raw/11f3b65ff172';
+        closeBtn.addEventListener('click', closeModal);
 
-  function openModal() {
-    document.getElementById('modal').classList.add('active');
-  }
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
 
-  function closeModal() {
-    document.getElementById('modal').classList.remove('active');
-    const btn = document.getElementById('copyBtn');
-    btn.textContent = '📋 Скопировать ссылку';
-    btn.classList.remove('copied');
-  }
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                closeModal();
+            }
+        });
 
-  function copyLink() {
-    const btn = document.getElementById('copyBtn');
+        // Копирование ссылки
+        copyBtn.addEventListener('click', function() {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(SUBSCRIPTION_URL)
+                    .then(showSuccess)
+                    .catch(() => fallbackCopy(SUBSCRIPTION_URL));
+            } else {
+                fallbackCopy(SUBSCRIPTION_URL);
+            }
+        });
 
-    const done = () => {
-      btn.textContent = '✅ Скопировано!';
-      btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = '📋 Скопировать ссылку';
-        btn.classList.remove('copied');
-      }, 2000);
-    };
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showSuccess();
+            } catch (err) {
+                alert('Не удалось скопировать. Скопируйте вручную.');
+            }
+            document.body.removeChild(textarea);
+        }
 
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(SUB_URL).then(done).catch(fallbackCopy);
-    } else {
-      fallbackCopy();
-    }
+        function showSuccess() {
+            successMsg.classList.add('show');
+            setTimeout(() => {
+                successMsg.classList.remove('show');
+            }, 2500);
+        }
 
-    function fallbackCopy() {
-      const ta = document.createElement('textarea');
-      ta.value = SUB_URL;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); done(); } catch(e) { alert('Скопируйте вручную:\n' + SUB_URL); }
-      document.body.removeChild(ta);
-    }
-  }
-
-  // Закрытие по клику вне окна
-  document.getElementById('modal').addEventListener('click', (e) => {
-    if (e.target.id === 'modal') closeModal();
-  });
+        // Инициализация
+        bypassMessage.classList.remove('show');
+    })();
 </script>
+
+<style>
+    .bypass-text, .btn-subscribe, .btn-copy, .btn-close {
+        user-select: none;
+    }
+</style>
 </body>
 </html>
