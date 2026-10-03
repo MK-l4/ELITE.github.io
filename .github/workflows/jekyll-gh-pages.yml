@@ -1,470 +1,489 @@
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite — обходит все глушилки</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elite VPN</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: #3b2a1c;
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-            padding: 20px;
-            background-image: radial-gradient(circle at 20% 30%, #5a3f2b 0%, #2e1f14 90%);
-        }
+  body {
+    min-height: 100vh;
+    background: radial-gradient(circle at 50% 0%, #1a1207, #060503 70%);
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    color: #f0e6d2;
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px 60px;
+  }
 
-        .container {
-            text-align: center;
-            max-width: 800px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-            padding: 30px 20px;
-            border-radius: 60px 60px 40px 40px;
-            background: rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(2px);
-            box-shadow: 0 20px 30px rgba(0,0,0,0.6), inset 0 1px 4px rgba(255, 215, 0, 0.2);
-            border: 1px solid rgba(255, 215, 0, 0.25);
-        }
+  .wrap {
+    width: 100%;
+    max-width: 460px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
 
-        .elite-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
-        }
+  /* ====== ОБЩИЕ РАМКИ ====== */
+  .card {
+    background: linear-gradient(160deg, #14100a, #0a0805);
+    border: 1px solid #4a3418;
+    border-radius: 22px;
+    padding: 22px 18px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.6), inset 0 1px 0 rgba(200,150,70,.08);
+    position: relative;
+    overflow: hidden;
+  }
 
-        .avatar {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #f5d742, #b8860b, #ffd966);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 0 3px #3b2a1c, 0 0 0 6px #d4af37, 0 8px 20px rgba(0,0,0,0.6);
-            transition: transform 0.2s ease;
-        }
+  /* ====== ПЕРВАЯ РАМКА ====== */
+  .hero {
+    text-align: center;
+    padding-top: 30px;
+  }
 
-        .avatar:hover {
-            transform: scale(1.02);
-        }
+  .free-badge {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #c9a86a;
+    text-shadow: 0 0 12px rgba(201,168,106,.6);
+  }
 
-        .avatar span {
-            font-size: 3rem;
-            font-weight: 900;
-            color: #3b2a1c;
-            text-shadow: 0 2px 2px #ffd966;
-            letter-spacing: 2px;
-        }
+  .avatar-zone {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-        .elite-text {
-            font-size: 5.5rem;
-            font-weight: 900;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            color: #ffd966;
-            text-shadow: 
-                0 0 8px #ffb347,
-                0 0 20px #d4af37,
-                2px 4px 10px #000000,
-                0 0 40px #b8860b;
-            font-family: 'Impact', 'Arial Black', sans-serif;
-            line-height: 1;
-        }
+  .thin-ring {
+    position: absolute;
+    inset: -12px;
+    border-radius: 50%;
+    border: 1.5px solid #7a5a2e;
+    box-shadow: 0 0 18px rgba(180,130,60,.35);
+  }
 
-        .bypass-area {
-            margin-top: 20px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
+  .sparkles {
+    position: absolute;
+    inset: -25px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255,215,130,.9) 0 2px, transparent 3px),
+      radial-gradient(circle at 80% 20%, rgba(255,200,90,.8) 0 1.5px, transparent 3px),
+      radial-gradient(circle at 15% 75%, rgba(255,225,150,.85) 0 2px, transparent 3px),
+      radial-gradient(circle at 88% 70%, rgba(255,190,80,.8) 0 1.5px, transparent 3px),
+      radial-gradient(circle at 50% 5%, rgba(255,230,160,.9) 0 2px, transparent 3px),
+      radial-gradient(circle at 5% 50%, rgba(255,210,110,.7) 0 1.5px, transparent 3px),
+      radial-gradient(circle at 95% 45%, rgba(255,220,130,.8) 0 2px, transparent 3px),
+      radial-gradient(circle at 45% 95%, rgba(255,200,100,.75) 0 1.5px, transparent 3px);
+    animation: twinkle 3s infinite ease-in-out;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: .55; transform: scale(1); }
+    50%     { opacity: 1;   transform: scale(1.06); }
+  }
 
-        .bypass-text {
-            font-size: 1.7rem;
-            font-weight: 600;
-            color: #e6c68a;
-            text-shadow: 0 2px 8px #1a0f07, 0 0 20px #7a5a2e;
-            cursor: pointer;
-            padding: 10px 28px;
-            border-radius: 50px;
-            background: rgba(70, 45, 25, 0.7);
-            border: 1px solid #b98f4b;
-            transition: all 0.25s ease;
-            box-shadow: 0 5px 0 #1e130b;
-            user-select: none;
-            letter-spacing: 1px;
-            backdrop-filter: blur(4px);
-        }
+  .elite-square {
+    position: relative;
+    width: 128px;
+    height: 128px;
+    border-radius: 20px;
+    border: 2px solid #a07a3c;
+    background: linear-gradient(160deg, #1c1508, #0d0904);
+    box-shadow: 0 0 25px rgba(200,150,70,.55), inset 0 0 20px rgba(200,150,70,.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .25s ease;
+    animation: idle 3s infinite ease-in-out;
+  }
+  @keyframes idle {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50%     { transform: translateY(-4px) rotate(-1deg); }
+  }
+  .elite-square.pressed { animation: press .45s ease; }
+  @keyframes press {
+    0%   { transform: scale(1) rotate(0deg); }
+    20%  { transform: scale(.88) rotate(-6deg); box-shadow: 0 0 40px rgba(255,215,130,.9); }
+    40%  { transform: scale(1.08) rotate(4deg); }
+    60%  { transform: scale(.95) rotate(-3deg); }
+    80%  { transform: scale(1.03) rotate(2deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
 
-        .bypass-text:hover {
-            background: rgba(110, 75, 40, 0.9);
-            color: #fff0c0;
-            border-color: #ffd966;
-            box-shadow: 0 5px 0 #1e130b, 0 0 20px #d4af37;
-            transform: translateY(-1px);
-        }
+  .elite-square span {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #f5dd9b, #b8893f, #f5dd9b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 14px rgba(245,221,155,.4);
+    text-align: center;
+    line-height: 1.3;
+    padding: 0 8px;
+    pointer-events: none;
+  }
 
-        .bypass-text:active {
-            transform: translateY(4px);
-            box-shadow: 0 1px 0 #1e130b;
-        }
+  .float-tag {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 700;
+    color: #e0b877;
+    border: 1px solid #7a5a2e;
+    border-radius: 20px;
+    padding: 4px 9px;
+    background: rgba(20,15,8,.85);
+    box-shadow: 0 0 10px rgba(180,130,60,.4);
+    z-index: 3;
+    white-space: nowrap;
+  }
+  .tag-1 { top: -6px;  left: -18px;  animation: float1 4s infinite ease-in-out; }
+  .tag-2 { bottom: 6px; right: -22px; animation: float2 4.5s infinite ease-in-out; }
 
-        .bypass-message {
-            margin-top: 18px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #ffecb3;
-            background: #2b1b0f;
-            padding: 14px 28px;
-            border-radius: 40px;
-            border-left: 8px solid #d4af37;
-            border-right: 8px solid #d4af37;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4), inset 0 0 15px #3f2b12;
-            opacity: 0;
-            transform: scale(0.95);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            pointer-events: none;
-            max-width: 90%;
-            line-height: 1.4;
-            letter-spacing: 1px;
-            text-shadow: 0 2px 5px black;
-        }
+  @keyframes float1 {
+    0%,100% { transform: translate(0,0) rotate(-6deg); }
+    50%     { transform: translate(-6px,-8px) rotate(-6deg); }
+  }
+  @keyframes float2 {
+    0%,100% { transform: translate(0,0) rotate(5deg); }
+    50%     { transform: translate(6px,8px) rotate(5deg); }
+  }
 
-        .bypass-message.show {
-            opacity: 1;
-            transform: scale(1);
-            pointer-events: auto;
-        }
+  .headline {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: .5px;
+    line-height: 1.4;
+    background: linear-gradient(90deg, #e8c887, #b8893f, #e8c887);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-top: 6px;
+  }
 
-        .btn-subscribe {
-            background: linear-gradient(145deg, #f5d742, #b8860b);
-            border: none;
-            color: #1e140e;
-            font-weight: 900;
-            font-size: 1.8rem;
-            text-transform: uppercase;
-            padding: 18px 42px;
-            border-radius: 60px;
-            letter-spacing: 3px;
-            cursor: pointer;
-            box-shadow: 0 12px 0 #4d2e0e, 0 10px 25px black;
-            transition: all 0.1s ease;
-            font-family: 'Segoe UI', 'Arial Black', sans-serif;
-            margin-top: 20px;
-            border: 1px solid #fff3c9;
-            text-shadow: 0 1px 2px rgba(255,255,200,0.8);
-        }
+  /* ====== ВТОРАЯ РАМКА ====== */
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #b8893f;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    text-align: center;
+  }
 
-        .btn-subscribe:hover {
-            background: linear-gradient(145deg, #ffe07a, #c99c2b);
-            box-shadow: 0 12px 0 #4d2e0e, 0 0 30px #ffd966;
-            transform: scale(1.01);
-        }
+  .feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 4px;
+    border-bottom: 1px solid rgba(122,90,46,.25);
+  }
+  .feature:last-child { border-bottom: none; }
 
-        .btn-subscribe:active {
-            transform: translateY(8px);
-            box-shadow: 0 4px 0 #4d2e0e, 0 10px 20px black;
-        }
+  .feature-icon { font-size: 20px; width: 26px; text-align: center; }
+  .feature-label { color: #b8893f; font-weight: 600; font-size: 14px; min-width: 92px; }
+  .feature-value { color: #f0e6d2; font-size: 14px; }
 
-        /* Модальное окно */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-        }
+  /* ====== КНОПКА ПОДПИСКА 👉 ====== */
+  .sub-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 18px;
+    border: none;
+    cursor: pointer;
+    border-radius: 16px;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #0a0805;
+    background: linear-gradient(135deg, #f5dd9b, #b8893f, #f5dd9b);
+    background-size: 200% 200%;
+    box-shadow: 0 8px 28px rgba(184,137,63,.5);
+    transition: .25s;
+    animation: shine 4s infinite;
+    font-family: inherit;
+  }
+  .sub-link-btn:hover { transform: translateY(-2px); filter: brightness(1.12); }
+  .sub-link-btn:active { transform: scale(.97); }
 
-        .modal-overlay.active {
-            display: flex;
-        }
+  .sub-link-btn .arrow {
+    display: inline-block;
+    animation: arrowMove 1.2s infinite ease-in-out;
+  }
+  @keyframes arrowMove {
+    0%,100% { transform: translateX(0); }
+    50%     { transform: translateX(6px); }
+  }
 
-        .modal-card {
-            background: linear-gradient(145deg, #4d3624, #2e1f14);
-            border-radius: 60px;
-            padding: 40px 30px;
-            max-width: 700px;
-            width: 100%;
-            box-shadow: 0 0 0 2px #d4af37, 0 30px 50px black;
-            border: 1px solid #ffd966;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 25px;
-            position: relative;
-        }
+  /* ====== МОДАЛЬНОЕ ОКНО (успех) ====== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.75);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
 
-        .modal-title {
-            color: #ffd966;
-            font-size: 2rem;
-            font-weight: 800;
-            text-shadow: 0 4px 8px black;
-            letter-spacing: 2px;
-            text-align: center;
-        }
+  .modal {
+    width: 100%;
+    max-width: 340px;
+    background: linear-gradient(160deg, #1a1408, #0a0805);
+    border: 1.5px solid #b8893f;
+    border-radius: 22px;
+    padding: 30px 22px;
+    text-align: center;
+    box-shadow: 0 0 45px rgba(184,137,63,.5);
+    animation: modalIn .3s ease;
+  }
+  @keyframes modalIn {
+    0%   { transform: scale(.8); opacity: 0; }
+    100% { transform: scale(1);  opacity: 1; }
+  }
 
-        .link-box {
-            background: #1f140c;
-            padding: 18px 22px;
-            border-radius: 50px;
-            width: 100%;
-            font-size: 1.25rem;
-            color: #e6c68a;
-            word-break: break-all;
-            border: 2px solid #b8860b;
-            box-shadow: inset 0 0 20px #000000;
-            font-family: monospace;
-            text-align: center;
-            letter-spacing: 0.5px;
-        }
+  .modal-icon {
+    font-size: 46px;
+    margin-bottom: 12px;
+    animation: pop .5s ease;
+  }
+  @keyframes pop {
+    0%   { transform: scale(0); }
+    70%  { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
 
-        .btn-copy {
-            background: #d4af37;
-            border: none;
-            color: #1e140e;
-            font-weight: 800;
-            font-size: 1.6rem;
-            padding: 18px 40px;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 8px 0 #6b4f1a, 0 8px 15px black;
-            transition: all 0.1s ease;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            width: 100%;
-            max-width: 420px;
-        }
+  .modal-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #f5dd9b;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-shadow: 0 0 14px rgba(245,221,155,.5);
+  }
 
-        .btn-copy:active {
-            transform: translateY(5px);
-            box-shadow: 0 3px 0 #6b4f1a, 0 8px 15px black;
-        }
+  .modal-text {
+    font-size: 13px;
+    color: #c9b184;
+    margin-bottom: 22px;
+    line-height: 1.5;
+    word-break: break-all;
+  }
 
-        .btn-copy:hover {
-            background: #e6c35c;
-        }
+  .modal-back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    cursor: pointer;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #0a0805;
+    background: linear-gradient(135deg, #e8c887, #b8893f, #e8c887);
+    background-size: 200% 200%;
+    box-shadow: 0 6px 22px rgba(184,137,63,.45);
+    transition: .25s;
+    animation: shine 4s infinite;
+    font-family: inherit;
+  }
+  .modal-back-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+  .modal-back-btn:active { transform: scale(.97); }
 
-        .btn-close {
-            background: #6e4f2e;
-            border: none;
-            color: #f0e0b0;
-            font-weight: 700;
-            font-size: 1.2rem;
-            padding: 12px 32px;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 6px 0 #2e1f14, 0 8px 15px black;
-            transition: all 0.1s ease;
-            letter-spacing: 1px;
-        }
+  /* ====== ТРЕТЬЯ РАМКА ====== */
+  .channel-card { text-align: center; }
 
-        .btn-close:active {
-            transform: translateY(4px);
-            box-shadow: 0 2px 0 #2e1f14, 0 8px 15px black;
-        }
+  .channel-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #b8893f;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
 
-        .btn-close:hover {
-            background: #8b653c;
-        }
+  .subscribe-btn {
+    display: inline-block;
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #0a0805;
+    background: linear-gradient(135deg, #e8c887, #b8893f, #e8c887);
+    background-size: 200% 200%;
+    box-shadow: 0 6px 22px rgba(184,137,63,.45);
+    transition: .25s;
+    animation: shine 4s infinite;
+  }
+  .subscribe-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+  .subscribe-btn:active { transform: scale(.98); }
 
-        .success-message {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #b9ff9b;
-            text-shadow: 0 0 15px #2ecc71, 0 0 30px #1e6b2e, 0 4px 8px black;
-            letter-spacing: 2px;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            background: #1e3a1e;
-            padding: 12px 38px;
-            border-radius: 50px;
-            border: 2px solid #7ed957;
-            box-shadow: 0 0 30px #2ecc71;
-            pointer-events: none;
-        }
+  @keyframes shine {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
-        .success-message.show {
-            opacity: 1;
-        }
-
-        @media (max-width: 600px) {
-            .elite-text {
-                font-size: 3.8rem;
-                letter-spacing: 4px;
-            }
-            .avatar {
-                width: 70px;
-                height: 70px;
-            }
-            .avatar span {
-                font-size: 2.4rem;
-            }
-            .bypass-text {
-                font-size: 1.3rem;
-                padding: 8px 18px;
-            }
-            .btn-subscribe {
-                font-size: 1.4rem;
-                padding: 14px 24px;
-                letter-spacing: 2px;
-            }
-            .modal-title {
-                font-size: 1.5rem;
-            }
-            .btn-copy {
-                font-size: 1.2rem;
-                padding: 14px 20px;
-            }
-            .link-box {
-                font-size: 1rem;
-                padding: 14px 16px;
-            }
-            .success-message {
-                font-size: 1.5rem;
-                padding: 10px 24px;
-            }
-        }
-    </style>
+  .bolt {
+    display: inline-block;
+    animation: pulse 1.6s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { transform: scale(1); filter: drop-shadow(0 0 4px #e8c887); }
+    50%     { transform: scale(1.25); filter: drop-shadow(0 0 12px #ffdb8a); }
+  }
+</style>
 </head>
 <body>
 
-<div class="container">
-    <div class="elite-header">
-        <div class="avatar">
-            <span>⚡</span>
-        </div>
-        <div class="elite-text">Elite</div>
+<div class="wrap">
+
+  <!-- ===== РАМКА 1: ELITE КВАДРАТ ===== -->
+  <div class="card hero">
+    <div class="free-badge">✨ FREE</div>
+
+    <div class="avatar-zone">
+      <div class="sparkles"></div>
+      <div class="thin-ring"></div>
+      <div class="float-tag tag-1">до 1 Гбит/с</div>
+      <div class="float-tag tag-2">до 1 Гбит/с</div>
+      <div class="elite-square" id="eliteSquare">
+        <span>ELITE<br>⚡️</span>
+      </div>
     </div>
 
-    <div class="bypass-area">
-        <div class="bypass-text" id="bypassTrigger">обходит все глушилки</div>
+    <div class="headline">САМЫЙ ЛУЧШИЙ ОБХОДИТ ВСЕ БЛОКИРОВКИ 🚀</div>
+  </div>
+
+  <!-- ===== РАМКА 2: О СЕРВИСЕ ===== -->
+  <div class="card">
+    <div class="card-title">О сервисе</div>
+
+    <div class="feature">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-label">Скорость</div>
+      <div class="feature-value">1 Гбит</div>
     </div>
 
-    <div class="bypass-message" id="bypassMessage">
-        Не суда, А на получить подписку.
+    <div class="feature">
+      <div class="feature-icon">🌐</div>
+      <div class="feature-label">Серверы</div>
+      <div class="feature-value">множество серверов</div>
     </div>
 
-    <button class="btn-subscribe" id="subscribeBtn">Получить подписку</button>
+    <div class="feature">
+      <div class="feature-icon">📱</div>
+      <div class="feature-label">Устройства</div>
+      <div class="feature-value">без ограничений</div>
+    </div>
+  </div>
+
+  <!-- ===== КНОПКА ПОДПИСКА 👉 ===== -->
+  <button class="sub-link-btn" id="subBtn">
+    ПОДПИСКА <span class="arrow">👉</span>
+  </button>
+
+  <!-- ===== РАМКА 3: О КАНАЛЕ ===== -->
+  <div class="card channel-card">
+    <div class="channel-title">О Канале <span class="bolt">⚡️</span></div>
+    <a class="subscribe-btn" href="https://t.me/FREEVPN444" target="_blank" rel="noopener">
+      ПОДПИСАТЬСЯ НА КАНАЛ
+    </a>
+  </div>
+
 </div>
 
-<!-- Модальное окно -->
+<!-- ===== МОДАЛЬНОЕ ОКНО УСПЕХА ===== -->
 <div class="modal-overlay" id="modalOverlay">
-    <div class="modal-card">
-        <div class="modal-title">🔗 ВАША ПОДПИСКА</div>
-        <div class="link-box" id="linkText">https://plainraw.com/raw/11f3b65ff172</div>
-        <button class="btn-copy" id="copyBtn">📋 Скопировать подписку</button>
-        <div class="success-message" id="successMsg">Успешно ✅</div>
-        <button class="btn-close" id="closeBtn">Закрыть</button>
-    </div>
+  <div class="modal">
+    <div class="modal-icon">✅</div>
+    <div class="modal-title">Скопировано успешно!</div>
+    <div class="modal-text" id="copiedLink"></div>
+    <button class="modal-back-btn" id="backBtn">Назад 🔙</button>
+  </div>
 </div>
 
 <script>
-    (function() {
-        const bypassTrigger = document.getElementById('bypassTrigger');
-        const bypassMessage = document.getElementById('bypassMessage');
-        const subscribeBtn = document.getElementById('subscribeBtn');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const copyBtn = document.getElementById('copyBtn');
-        const closeBtn = document.getElementById('closeBtn');
-        const successMsg = document.getElementById('successMsg');
+  /* ====== Анимация рамки ELITE ⚡️ ====== */
+  const eliteSquare = document.getElementById('eliteSquare');
+  eliteSquare.addEventListener('click', () => {
+    eliteSquare.classList.remove('pressed');
+    void eliteSquare.offsetWidth;
+    eliteSquare.classList.add('pressed');
+    setTimeout(() => eliteSquare.classList.remove('pressed'), 500);
+  });
 
-        const SUBSCRIPTION_URL = 'https://plainraw.com/raw/11f3b65ff172';
+  /* ====== Логика ПОДПИСКА 👉 ====== */
+  const SUB_URL = 'https://plainraw.com/raw/11f3b65ff172';
 
-        // Клик по "обходит все глушилки" — toggle сообщения
-        bypassTrigger.addEventListener('click', function() {
-            bypassMessage.classList.toggle('show');
-        });
+  const subBtn       = document.getElementById('subBtn');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const copiedLink   = document.getElementById('copiedLink');
+  const backBtn      = document.getElementById('backBtn');
 
-        // Открытие модального окна по кнопке "Получить подписку"
-        subscribeBtn.addEventListener('click', function() {
-            modalOverlay.classList.add('active');
-            successMsg.classList.remove('show');
-        });
+  subBtn.addEventListener('click', async () => {
+    // копируем ссылку в буфер обмена
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(SUB_URL);
+      } else {
+        // фолбэк для старых браузеров / http
+        const ta = document.createElement('textarea');
+        ta.value = SUB_URL;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      showSuccess();
+    } catch (e) {
+      showSuccess(); // всё равно показываем окно
+    }
+  });
 
-        // Закрытие модалки
-        function closeModal() {
-            modalOverlay.classList.remove('active');
-            successMsg.classList.remove('show');
-        }
+  function showSuccess() {
+    copiedLink.textContent = SUB_URL;
+    modalOverlay.classList.add('active');
+  }
 
-        closeBtn.addEventListener('click', closeModal);
+  // Назад 🔙 — закрыть модалку
+  backBtn.addEventListener('click', () => {
+    modalOverlay.classList.remove('active');
+  });
 
-        modalOverlay.addEventListener('click', function(e) {
-            if (e.target === modalOverlay) {
-                closeModal();
-            }
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-                closeModal();
-            }
-        });
-
-        // Копирование ссылки
-        copyBtn.addEventListener('click', function() {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(SUBSCRIPTION_URL)
-                    .then(showSuccess)
-                    .catch(() => fallbackCopy(SUBSCRIPTION_URL));
-            } else {
-                fallbackCopy(SUBSCRIPTION_URL);
-            }
-        });
-
-        function fallbackCopy(text) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed';
-            textarea.style.opacity = '0';
-            document.body.appendChild(textarea);
-            textarea.select();
-            try {
-                document.execCommand('copy');
-                showSuccess();
-            } catch (err) {
-                alert('Не удалось скопировать. Скопируйте вручную.');
-            }
-            document.body.removeChild(textarea);
-        }
-
-        function showSuccess() {
-            successMsg.classList.add('show');
-            setTimeout(() => {
-                successMsg.classList.remove('show');
-            }, 2500);
-        }
-
-        // Инициализация
-        bypassMessage.classList.remove('show');
-    })();
+  // Клик по фону — тоже закрыть
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) modalOverlay.classList.remove('active');
+  });
 </script>
 
-<style>
-    .bypass-text, .btn-subscribe, .btn-copy, .btn-close {
-        user-select: none;
-    }
-</style>
 </body>
 </html>
