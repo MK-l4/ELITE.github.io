@@ -121,24 +121,50 @@
     to   { transform: rotate(360deg); }
   }
 
-  /* 1 GB/S — ЗА ПРЕДЕЛАМИ АВЫ, медленно вверх-вниз */
-  .speed {
+  /* ===== БЕЙДЖ "Спасибо вам ♥️" — НА МЕСТЕ АВЫ, ПЛАВНО ВВЕРХ-ВНИЗ ===== */
+  .thanks-badge {
     position: absolute;
-    bottom: -34px;
+    bottom: -30px;
     left: 50%;
     z-index: 6;
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 14px;
-    letter-spacing: 1.5px;
-    text-shadow: 0 0 10px rgba(120, 190, 255, 1), 0 0 4px rgba(120, 190, 255, 0.8);
-    animation: bob 3.4s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 30px;
+    background: linear-gradient(145deg, rgba(30, 58, 138, 0.9), rgba(15, 37, 87, 0.95));
+    border: 1.5px solid rgba(120, 190, 255, 0.7);
+    box-shadow:
+      0 0 18px rgba(60, 150, 255, 0.5),
+      inset 0 0 10px rgba(0, 0, 0, 0.3);
+    animation: bob 3.6s ease-in-out infinite;
     pointer-events: none;
     white-space: nowrap;
   }
+  .thanks-badge span {
+    font-size: 14px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 8px rgba(120, 190, 255, 0.9);
+  }
+  /* Сердце контурное SVG */
+  .thanks-badge svg {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    filter: drop-shadow(0 0 4px rgba(255, 138, 138, 0.9));
+    animation: heartbeat 1.6s ease-in-out infinite;
+  }
   @keyframes bob {
     0%, 100% { transform: translate(-50%, 0); }
-    50%      { transform: translate(-50%, -10px); }
+    50%      { transform: translate(-50%, -12px); }
+  }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    25%      { transform: scale(1.18); }
+    40%      { transform: scale(1); }
+    60%      { transform: scale(1.12); }
   }
 
   /* ============ РАМКИ ============ */
@@ -251,8 +277,15 @@
       </div>
     </div>
 
-    <!-- 1 gb/s — ЗА ПРЕДЕЛАМИ АВЫ -->
-    <div class="speed">1 gb/s</div>
+    <!-- ===== БЕЙДЖ "Спасибо вам ♥️" — НА МЕСТЕ АВЫ, ДВИЖЕТСЯ ВВЕРХ-ВНИЗ ===== -->
+    <div class="thanks-badge">
+      <span>Спасибо вам</span>
+      <!-- Сердце контурное SVG -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="#ff8a8a" stroke-width="1.8"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 0 0-7.1 7.1l1.7 1.7L12 21l7.1-6.6 1.7-1.7a5 5 0 0 0 0-7.1z"/>
+      </svg>
+    </div>
   </div>
 
   <!-- ===== ПЕРВАЯ РАМКА ===== -->
