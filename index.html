@@ -47,7 +47,7 @@
     z-index: 2;
   }
 
-  /* Кляксы */
+  /* ===== 4 КЛЯКСЫ ===== */
   .blob {
     position: absolute;
     border-radius: 50%;
@@ -58,6 +58,7 @@
   .blob1 { width: 150px; height: 150px; top: -55px; left: -55px; }
   .blob2 { width: 115px; height: 115px; bottom: -40px; right: -32px; background: #091634; }
   .blob3 { width: 85px;  height: 85px;  top: 45%; left: -35px; background: #0d1f4d; }
+  .blob4 { width: 100px; height: 100px; top: -30px; right: -40px; background: #071229; }
 
   /* Текст на аве */
   .ava-text {
@@ -73,7 +74,7 @@
   .ava-text .line1 { font-size: 30px; }
   .ava-text .line2 { font-size: 26px; }
 
-  /* Самолёт — летит по диагонали (перемещение + покачивание) */
+  /* Самолёт — летит по аве */
   .plane {
     position: absolute;
     z-index: 4;
@@ -230,9 +231,11 @@
     </div>
 
     <div class="avatar">
+      <!-- 4 кляксы -->
       <div class="blob blob1"></div>
       <div class="blob blob2"></div>
       <div class="blob blob3"></div>
+      <div class="blob blob4"></div>
 
       <!-- Самолёт (контурный SVG) — летит по аве -->
       <div class="plane">
