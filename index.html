@@ -3,486 +3,630 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Elite VPN</title>
+<title>VPN КАНАЛ — Свободный интернет</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300;400;500&display=swap" rel="stylesheet">
+
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-  body {
+  :root {
+    --gold: #ffd700;
+    --gold-soft: #ffe98a;
+    --blue: #1e90ff;
+    --blue-glow: #4db8ff;
+    --bg-dark: #050818;
+    --card-bg: rgba(15, 25, 55, 0.75);
+    --card-border: rgba(80, 160, 255, 0.35);
+  }
+
+  html, body {
     min-height: 100vh;
-    background: radial-gradient(circle at 50% 0%, #1a1207, #060503 70%);
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    color: #f0e6d2;
-    display: flex;
-    justify-content: center;
-    padding: 24px 16px 60px;
-  }
-
-  .wrap {
-    width: 100%;
-    max-width: 460px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  /* ====== ОБЩИЕ РАМКИ ====== */
-  .card {
-    background: linear-gradient(160deg, #14100a, #0a0805);
-    border: 1px solid #4a3418;
-    border-radius: 22px;
-    padding: 22px 18px;
-    box-shadow: 0 8px 30px rgba(0,0,0,.6), inset 0 1px 0 rgba(200,150,70,.08);
+    font-family: 'Segoe UI', -apple-system, Roboto, sans-serif;
+    background: radial-gradient(ellipse at top, #0a1440 0%, #050818 50%, #000208 100%);
+    color: #fff;
+    overflow-x: hidden;
     position: relative;
+  }
+
+  /* Контурные эмодзи */
+  .emo, .emoji {
+    font-family: 'Noto Emoji', 'Segoe UI Emoji', sans-serif;
+    font-weight: 400;
+    color: var(--gold);
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px var(--gold);
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.35);
+    display: inline-block;
+    line-height: 1;
+    font-style: normal;
+  }
+
+  /* Фон */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(30, 144, 255, 0.15), transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(77, 184, 255, 0.12), transparent 45%),
+      radial-gradient(circle at 50% 100%, rgba(255, 215, 0, 0.05), transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, #fff, transparent),
+      radial-gradient(1px 1px at 30% 60%, #9cdcff, transparent),
+      radial-gradient(1px 1px at 70% 30%, #fff, transparent),
+      radial-gradient(1px 1px at 90% 80%, #9cdcff, transparent),
+      radial-gradient(1px 1px at 45% 90%, #fff, transparent),
+      radial-gradient(1px 1px at 60% 15%, #9cdcff, transparent);
+    background-size: 100% 100%;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+    animation: twinkle 4s ease-in-out infinite alternate;
+  }
+
+  @keyframes twinkle {
+    from { opacity: 0.3; }
+    to { opacity: 0.7; }
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px 18px 60px;
+  }
+
+  /* ---------- ЛЕТАЮЩИЕ СЛОВА ---------- */
+  .floating-words {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
     overflow: hidden;
   }
 
-  /* ====== ПЕРВАЯ РАМКА ====== */
-  .hero {
-    text-align: center;
-    padding-top: 30px;
-  }
-
-  .free-badge {
+  .float-word {
     position: absolute;
-    top: 14px;
-    right: 16px;
     font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: #c9a86a;
-    text-shadow: 0 0 12px rgba(201,168,106,.6);
+    font-weight: 600;
+    color: var(--blue-glow);
+    white-space: nowrap;
+    opacity: 0;
+    animation: floatUp linear infinite;
   }
 
-  .avatar-zone {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    margin: 0 auto 18px;
+  .float-word.gold {
+    color: var(--gold);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+  }
+
+  @keyframes floatUp {
+    0%   { transform: translateY(100vh) translateX(0) scale(0.8); opacity: 0; }
+    10%  { opacity: 0.85; }
+    90%  { opacity: 0.85; }
+    100% { transform: translateY(-120px) translateX(40px) scale(1.1); opacity: 0; }
+  }
+
+  /* ---------- АВАТАР С АНИМАЦИЕЙ ВЛЕВО-ВПРАВО ---------- */
+  .avatar-wrap {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    margin-bottom: 18px;
+    animation: fadeDown 0.7s ease;
   }
 
-  .thin-ring {
-    position: absolute;
-    inset: -12px;
-    border-radius: 50%;
-    border: 1.5px solid #7a5a2e;
-    box-shadow: 0 0 18px rgba(180,130,60,.35);
+  /* Обёртка для покачивания влево-вправо */
+  .avatar-swing {
+    animation: swing 3.2s ease-in-out infinite;
+    transform-origin: center bottom;
   }
 
-  .sparkles {
-    position: absolute;
-    inset: -25px;
-    border-radius: 50%;
-    background:
-      radial-gradient(circle at 20% 30%, rgba(255,215,130,.9) 0 2px, transparent 3px),
-      radial-gradient(circle at 80% 20%, rgba(255,200,90,.8) 0 1.5px, transparent 3px),
-      radial-gradient(circle at 15% 75%, rgba(255,225,150,.85) 0 2px, transparent 3px),
-      radial-gradient(circle at 88% 70%, rgba(255,190,80,.8) 0 1.5px, transparent 3px),
-      radial-gradient(circle at 50% 5%, rgba(255,230,160,.9) 0 2px, transparent 3px),
-      radial-gradient(circle at 5% 50%, rgba(255,210,110,.7) 0 1.5px, transparent 3px),
-      radial-gradient(circle at 95% 45%, rgba(255,220,130,.8) 0 2px, transparent 3px),
-      radial-gradient(circle at 45% 95%, rgba(255,200,100,.75) 0 1.5px, transparent 3px);
-    animation: twinkle 3s infinite ease-in-out;
-  }
-  @keyframes twinkle {
-    0%,100% { opacity: .55; transform: scale(1); }
-    50%     { opacity: 1;   transform: scale(1.06); }
+  @keyframes swing {
+    0%   { transform: translateX(-10px) rotate(-3deg); }
+    50%  { transform: translateX(10px)  rotate(3deg);  }
+    100% { transform: translateX(-10px) rotate(-3deg); }
   }
 
-  .elite-square {
-    position: relative;
-    width: 128px;
-    height: 128px;
+  .avatar {
+    width: 96px;
+    height: 96px;
     border-radius: 20px;
-    border: 2px solid #a07a3c;
-    background: linear-gradient(160deg, #1c1508, #0d0904);
-    box-shadow: 0 0 25px rgba(200,150,70,.55), inset 0 0 20px rgba(200,150,70,.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-    cursor: pointer;
-    transition: transform .12s ease, box-shadow .25s ease;
-    animation: idle 3s infinite ease-in-out;
-  }
-  @keyframes idle {
-    0%,100% { transform: translateY(0) rotate(0deg); }
-    50%     { transform: translateY(-4px) rotate(-1deg); }
-  }
-  .elite-square.pressed { animation: press .45s ease; }
-  @keyframes press {
-    0%   { transform: scale(1) rotate(0deg); }
-    20%  { transform: scale(.88) rotate(-6deg); box-shadow: 0 0 40px rgba(255,215,130,.9); }
-    40%  { transform: scale(1.08) rotate(4deg); }
-    60%  { transform: scale(.95) rotate(-3deg); }
-    80%  { transform: scale(1.03) rotate(2deg); }
-    100% { transform: scale(1) rotate(0deg); }
+    overflow: hidden;
+    position: relative;
+    background: #0a1a4d;
+    box-shadow:
+      0 0 0 2px rgba(255, 215, 0, 0.6),
+      0 0 25px rgba(30, 144, 255, 0.7),
+      0 0 50px rgba(30, 144, 255, 0.35);
+    animation: breathe 3.2s ease-in-out infinite;
   }
 
-  .elite-square span {
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: 2px;
-    background: linear-gradient(135deg, #f5dd9b, #b8893f, #f5dd9b);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    text-shadow: 0 0 14px rgba(245,221,155,.4);
-    text-align: center;
-    line-height: 1.3;
-    padding: 0 8px;
+  @keyframes breathe {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(255,215,0,0.6), 0 0 22px rgba(30,144,255,0.65), 0 0 45px rgba(30,144,255,0.3); }
+    50%      { box-shadow: 0 0 0 2px rgba(255,215,0,0.85), 0 0 32px rgba(30,144,255,0.9), 0 0 60px rgba(30,144,255,0.5); }
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 42%;
+    display: block;
+  }
+
+  .avatar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.25);
     pointer-events: none;
   }
 
-  .float-tag {
+  /* Блик, проходящий по аватарке */
+  .avatar .shine {
     position: absolute;
-    font-size: 10px;
-    font-weight: 700;
-    color: #e0b877;
-    border: 1px solid #7a5a2e;
-    border-radius: 20px;
-    padding: 4px 9px;
-    background: rgba(20,15,8,.85);
-    box-shadow: 0 0 10px rgba(180,130,60,.4);
-    z-index: 3;
-    white-space: nowrap;
+    top: 0;
+    left: -150%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(115deg,
+      transparent 0%,
+      rgba(255,255,255,0.0) 30%,
+      rgba(255,255,255,0.45) 50%,
+      rgba(255,255,255,0.0) 70%,
+      transparent 100%);
+    animation: shine 3.5s ease-in-out infinite;
+    pointer-events: none;
   }
-  .tag-1 { top: -6px;  left: -18px;  animation: float1 4s infinite ease-in-out; }
-  .tag-2 { bottom: 6px; right: -22px; animation: float2 4.5s infinite ease-in-out; }
-
-  @keyframes float1 {
-    0%,100% { transform: translate(0,0) rotate(-6deg); }
-    50%     { transform: translate(-6px,-8px) rotate(-6deg); }
-  }
-  @keyframes float2 {
-    0%,100% { transform: translate(0,0) rotate(5deg); }
-    50%     { transform: translate(6px,8px) rotate(5deg); }
-  }
-
-  .headline {
-    font-size: 17px;
-    font-weight: 800;
-    letter-spacing: .5px;
-    line-height: 1.4;
-    background: linear-gradient(90deg, #e8c887, #b8893f, #e8c887);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    margin-top: 6px;
-  }
-
-  /* ====== ВТОРАЯ РАМКА ====== */
-  .card-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #b8893f;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-    text-align: center;
-  }
-
-  .feature {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 4px;
-    border-bottom: 1px solid rgba(122,90,46,.25);
-  }
-  .feature:last-child { border-bottom: none; }
-
-  .feature-icon { font-size: 20px; width: 26px; text-align: center; }
-  .feature-label { color: #b8893f; font-weight: 600; font-size: 14px; min-width: 92px; }
-  .feature-value { color: #f0e6d2; font-size: 14px; }
-
-  /* ====== КНОПКА ПОДПИСКА 👉 ====== */
-  .sub-link-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    padding: 18px;
-    border: none;
-    cursor: pointer;
-    border-radius: 16px;
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    color: #0a0805;
-    background: linear-gradient(135deg, #f5dd9b, #b8893f, #f5dd9b);
-    background-size: 200% 200%;
-    box-shadow: 0 8px 28px rgba(184,137,63,.5);
-    transition: .25s;
-    animation: shine 4s infinite;
-    font-family: inherit;
-  }
-  .sub-link-btn:hover { transform: translateY(-2px); filter: brightness(1.12); }
-  .sub-link-btn:active { transform: scale(.97); }
-
-  .sub-link-btn .arrow {
-    display: inline-block;
-    animation: arrowMove 1.2s infinite ease-in-out;
-  }
-  @keyframes arrowMove {
-    0%,100% { transform: translateX(0); }
-    50%     { transform: translateX(6px); }
-  }
-
-  /* ====== МОДАЛЬНОЕ ОКНО (успех) ====== */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.75);
-    backdrop-filter: blur(6px);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    padding: 20px;
-  }
-  .modal-overlay.active { display: flex; }
-
-  .modal {
-    width: 100%;
-    max-width: 340px;
-    background: linear-gradient(160deg, #1a1408, #0a0805);
-    border: 1.5px solid #b8893f;
-    border-radius: 22px;
-    padding: 30px 22px;
-    text-align: center;
-    box-shadow: 0 0 45px rgba(184,137,63,.5);
-    animation: modalIn .3s ease;
-  }
-  @keyframes modalIn {
-    0%   { transform: scale(.8); opacity: 0; }
-    100% { transform: scale(1);  opacity: 1; }
-  }
-
-  .modal-icon {
-    font-size: 46px;
-    margin-bottom: 12px;
-    animation: pop .5s ease;
-  }
-  @keyframes pop {
-    0%   { transform: scale(0); }
-    70%  { transform: scale(1.2); }
-    100% { transform: scale(1); }
-  }
-
-  .modal-title {
-    font-size: 20px;
-    font-weight: 800;
-    color: #f5dd9b;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-    text-shadow: 0 0 14px rgba(245,221,155,.5);
-  }
-
-  .modal-text {
-    font-size: 13px;
-    color: #c9b184;
-    margin-bottom: 22px;
-    line-height: 1.5;
-    word-break: break-all;
-  }
-
-  .modal-back-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    padding: 14px;
-    border: none;
-    cursor: pointer;
-    border-radius: 14px;
-    font-size: 16px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    color: #0a0805;
-    background: linear-gradient(135deg, #e8c887, #b8893f, #e8c887);
-    background-size: 200% 200%;
-    box-shadow: 0 6px 22px rgba(184,137,63,.45);
-    transition: .25s;
-    animation: shine 4s infinite;
-    font-family: inherit;
-  }
-  .modal-back-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-  .modal-back-btn:active { transform: scale(.97); }
-
-  /* ====== ТРЕТЬЯ РАМКА ====== */
-  .channel-card { text-align: center; }
-
-  .channel-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: #b8893f;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 18px;
-  }
-
-  .subscribe-btn {
-    display: inline-block;
-    width: 100%;
-    padding: 16px;
-    border-radius: 14px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: #0a0805;
-    background: linear-gradient(135deg, #e8c887, #b8893f, #e8c887);
-    background-size: 200% 200%;
-    box-shadow: 0 6px 22px rgba(184,137,63,.45);
-    transition: .25s;
-    animation: shine 4s infinite;
-  }
-  .subscribe-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-  .subscribe-btn:active { transform: scale(.98); }
 
   @keyframes shine {
-    0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0%   { left: -150%; }
+    60%  { left: 150%; }
+    100% { left: 150%; }
   }
 
-  .bolt {
-    display: inline-block;
-    animation: pulse 1.6s infinite;
+  .avatar-caption {
+    margin-top: 10px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
   }
-  @keyframes pulse {
-    0%,100% { transform: scale(1); filter: drop-shadow(0 0 4px #e8c887); }
-    50%     { transform: scale(1.25); filter: drop-shadow(0 0 12px #ffdb8a); }
+
+  .stats {
+    display: flex;
+    gap: 22px;
+    margin-top: 14px;
+    font-size: 14px;
+    font-weight: 600;
   }
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #cfe6ff;
+  }
+
+  .stat b {
+    color: var(--gold);
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  }
+
+  /* ---------- РАМКИ ---------- */
+  .frame {
+    background: var(--card-bg);
+    border: 1.5px solid var(--card-border);
+    border-radius: 18px;
+    padding: 20px 18px;
+    margin-bottom: 18px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow:
+      0 0 0 1px rgba(255, 215, 0, 0.08),
+      0 8px 32px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.7s ease backwards;
+  }
+
+  .frame:nth-child(2) { animation-delay: 0.1s; }
+  .frame:nth-child(3) { animation-delay: 0.2s; }
+
+  .frame::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    animation: shimmer 3s linear infinite;
+  }
+
+  @keyframes shimmer { to { left: 100%; } }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .frame-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gold-soft);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+  }
+
+  .frame-text {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: #d8e8ff;
+    margin-bottom: 16px;
+  }
+
+  .frame-text b { color: var(--gold); }
+
+  /* ---------- КНОПКИ ---------- */
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    letter-spacing: 0.3px;
+    position: relative;
+    overflow: hidden;
+    font-family: inherit;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #1e90ff 0%, #4db8ff 100%);
+    color: #fff;
+    box-shadow: 0 6px 22px rgba(30, 144, 255, 0.55), inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+
+  .btn-primary:active { transform: scale(0.97); }
+
+  .btn-gold {
+    background: linear-gradient(135deg, #ffd700 0%, #ffb800 100%);
+    color: #1a1200;
+    box-shadow: 0 6px 22px rgba(255, 215, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+
+  .btn-gold:active { transform: scale(0.97); }
+
+  .btn-success {
+    background: linear-gradient(135deg, #16c784 0%, #00a86b 100%);
+    color: #fff;
+    box-shadow: 0 6px 22px rgba(22, 199, 132, 0.5);
+    cursor: default;
+  }
+
+  .btn-ghost {
+    background: rgba(255, 255, 255, 0.06);
+    color: #cfe6ff;
+    border: 1px solid rgba(80, 160, 255, 0.4);
+  }
+
+  .btn-ghost:active { transform: scale(0.97); }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .btn-row .btn { flex: 1; }
+
+  .btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* ---------- ФУТЕР ---------- */
+  .footer {
+    text-align: center;
+    margin-top: 26px;
+    font-size: 12px;
+    color: rgba(200, 220, 255, 0.4);
+    letter-spacing: 1px;
+  }
+
+  .footer .heart { color: var(--gold); display: inline-block; vertical-align: middle; }
+  .footer .heart svg { width: 12px; height: 12px; }
+
+  /* ---------- TOAST ---------- */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    background: linear-gradient(135deg, #16c784, #00a86b);
+    color: #fff;
+    padding: 14px 26px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 14px;
+    box-shadow: 0 10px 40px rgba(22, 199, 132, 0.6);
+    z-index: 9999;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast svg { width: 18px; height: 18px; }
 </style>
 </head>
 <body>
 
-<div class="wrap">
+<div class="floating-words" id="floatingWords"></div>
 
-  <!-- ===== РАМКА 1: ELITE КВАДРАТ ===== -->
-  <div class="card hero">
-    <div class="free-badge">✨ FREE</div>
+<div class="container">
 
-    <div class="avatar-zone">
-      <div class="sparkles"></div>
-      <div class="thin-ring"></div>
-      <div class="float-tag tag-1">до 1 Гбит/с</div>
-      <div class="float-tag tag-2">до 1 Гбит/с</div>
-      <div class="elite-square" id="eliteSquare">
-        <span>ELITE<br>⚡️</span>
+  <!-- АВАТАР с покачиванием влево-вправо -->
+  <div class="avatar-wrap">
+    <div class="avatar-swing">
+      <div class="avatar">
+        <img src="avatar.png" alt="VPN КАНАЛ" id="avatarImg">
+        <div class="shine"></div>
       </div>
     </div>
-
-    <div class="headline">САМЫЙ ЛУЧШИЙ ОБХОДИТ ВСЕ БЛОКИРОВКИ 🚀</div>
-  </div>
-
-  <!-- ===== РАМКА 2: О СЕРВИСЕ ===== -->
-  <div class="card">
-    <div class="card-title">О сервисе</div>
-
-    <div class="feature">
-      <div class="feature-icon">⚡</div>
-      <div class="feature-label">Скорость</div>
-      <div class="feature-value">1 Гбит</div>
-    </div>
-
-    <div class="feature">
-      <div class="feature-icon">🌐</div>
-      <div class="feature-label">Серверы</div>
-      <div class="feature-value">множество серверов</div>
-    </div>
-
-    <div class="feature">
-      <div class="feature-icon">📱</div>
-      <div class="feature-label">Устройства</div>
-      <div class="feature-value">без ограничений</div>
+    <div class="avatar-caption">VPN КАНАЛ</div>
+    <div class="stats">
+      <div class="stat">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <rect x="6" y="2" width="12" height="20" rx="2.5" stroke="#ffd700" stroke-width="1.5"/>
+          <line x1="10" y1="18" x2="14" y2="18" stroke="#ffd700" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <b>0/♾️</b>
+      </div>
+      <div class="stat">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="9" stroke="#ffd700" stroke-width="1.5"/>
+          <ellipse cx="12" cy="12" rx="4" ry="9" stroke="#ffd700" stroke-width="1.5"/>
+          <line x1="3" y1="12" x2="21" y2="12" stroke="#ffd700" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <b>много серверов</b>
+      </div>
     </div>
   </div>
 
-  <!-- ===== КНОПКА ПОДПИСКА 👉 ===== -->
-  <button class="sub-link-btn" id="subBtn">
-    ПОДПИСКА <span class="arrow">👉</span>
-  </button>
+  <!-- РАМКА 1 -->
+  <div class="frame">
+    <div class="frame-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <path d="M13 2L4 14H11L10 22L20 9H13L13 2Z" stroke="#ffd700" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+      Всех приветствую!
+    </div>
+    <div class="frame-text">
+      Этот сайт создан для получения <b>подписки</b> 🚀<br>
+      Нажмите на <b>«Получить подписку»</b> 🔽
+    </div>
+    <button class="btn btn-primary" id="getSubBtn" onclick="getSubscription()">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 3L12 21M12 3L6 9M12 3L18 9" stroke="#fff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="12" cy="12" r="11" stroke="#fff" stroke-width="1.4" opacity="0.35"/>
+      </svg>
+      Получить подписку
+    </button>
 
-  <!-- ===== РАМКА 3: О КАНАЛЕ ===== -->
-  <div class="card channel-card">
-    <div class="channel-title">О Канале <span class="bolt">⚡️</span></div>
-    <a class="subscribe-btn" href="https://t.me/FREEVPN444" target="_blank" rel="noopener">
-      ПОДПИСАТЬСЯ НА КАНАЛ
-    </a>
+    <div class="btn-row" id="actionRow" style="display:none;">
+      <button class="btn btn-gold" onclick="copySub()">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="8" y="8" width="12" height="12" rx="2" stroke="#1a1200" stroke-width="1.6"/>
+          <path d="M16 8V6C16 4.9 15.1 4 14 4H6C4.9 4 4 4.9 4 6V14C4 15.1 4.9 16 6 16H8" stroke="#1a1200" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        Скопировать
+      </button>
+      <button class="btn btn-ghost" onclick="backToMain()">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M11 6L5 12L11 18" stroke="#cfe6ff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+          <path d="M5 12H19" stroke="#cfe6ff" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        Назад
+      </button>
+    </div>
+
+    <div id="successMsg" style="display:none; margin-top:12px;">
+      <button class="btn btn-success">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M4 12L9 17L20 6" stroke="#fff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+        Успешно скопировано
+      </button>
+    </div>
   </div>
 
+  <!-- РАМКА 2 -->
+  <div class="frame">
+    <div class="frame-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="5" width="18" height="14" rx="2" stroke="#ffd700" stroke-width="1.5"/>
+        <path d="M3 7L12 13L21 7" stroke="#ffd700" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+      Следите за новостями
+    </div>
+    <div class="frame-text">
+      Все актуальные обновления, новые сервера и подписки публикуются в нашем Telegram-канале.
+    </div>
+    <button class="btn btn-primary" onclick="subscribeTG()">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M21 4L2.5 11.3C1.8 11.6 1.8 12.4 2.5 12.7L7.5 14.5L9.5 20.5C9.7 21.1 10.4 21.2 10.8 20.7L13.5 17.5L18.5 21C19 21.4 19.7 21.1 19.9 20.5L22.8 5C23 4.3 22.3 3.7 21 4Z"
+              stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M7.5 14.5L19 6" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      Следить
+    </button>
+  </div>
+
+  <div class="footer">
+    СДЕЛАНО С
+    <span class="heart">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 21C12 21 3 14.5 3 8.5C3 5.5 5.5 3 8.5 3C10.2 3 11.5 4 12 5C12.5 4 13.8 3 15.5 3C18.5 3 21 5.5 21 8.5C21 14.5 12 21 12 21Z"
+              stroke="#ffd700" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    ДЛЯ ВАС
+  </div>
 </div>
 
-<!-- ===== МОДАЛЬНОЕ ОКНО УСПЕХА ===== -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <div class="modal-icon">✅</div>
-    <div class="modal-title">Скопировано успешно!</div>
-    <div class="modal-text" id="copiedLink"></div>
-    <button class="modal-back-btn" id="backBtn">Назад 🔙</button>
-  </div>
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none">
+    <path d="M4 12L9 17L20 6" stroke="#fff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>
+  <span id="toastText">Успешно</span>
 </div>
 
 <script>
-  /* ====== Анимация рамки ELITE ⚡️ ====== */
-  const eliteSquare = document.getElementById('eliteSquare');
-  eliteSquare.addEventListener('click', () => {
-    eliteSquare.classList.remove('pressed');
-    void eliteSquare.offsetWidth;
-    eliteSquare.classList.add('pressed');
-    setTimeout(() => eliteSquare.classList.remove('pressed'), 500);
-  });
-
-  /* ====== Логика ПОДПИСКА 👉 ====== */
   const SUB_URL = 'https://plainraw.com/raw/11f3b65ff172';
+  const TG_URL  = 'https://t.me/FREEVPN444';
 
-  const subBtn       = document.getElementById('subBtn');
-  const modalOverlay = document.getElementById('modalOverlay');
-  const copiedLink   = document.getElementById('copiedLink');
-  const backBtn      = document.getElementById('backBtn');
+  // ================== ЛЕТАЮЩИЕ СЛОВА ==================
+  const words = ['1 gb/s', 'Бесплатный', '1 gb/s', 'Бесплатный'];
+  const container = document.getElementById('floatingWords');
 
-  subBtn.addEventListener('click', async () => {
-    // копируем ссылку в буфер обмена
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(SUB_URL);
-      } else {
-        // фолбэк для старых браузеров / http
-        const ta = document.createElement('textarea');
-        ta.value = SUB_URL;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-      }
-      showSuccess();
-    } catch (e) {
-      showSuccess(); // всё равно показываем окно
-    }
-  });
+  const boltSVG = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-left:3px;"><path d="M13 2L4 14H11L10 22L20 9H13L13 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>';
 
-  function showSuccess() {
-    copiedLink.textContent = SUB_URL;
-    modalOverlay.classList.add('active');
+  function spawnWord() {
+    const w = document.createElement('div');
+    const isGold = Math.random() > 0.5;
+    w.className = 'float-word' + (isGold ? ' gold' : '');
+    w.innerHTML = words[Math.floor(Math.random() * words.length)] + boltSVG;
+    w.style.left = (Math.random() * 90) + '%';
+    w.style.animationDuration = (10 + Math.random() * 8) + 's';
+    w.style.fontSize = (11 + Math.random() * 6) + 'px';
+    container.appendChild(w);
+    setTimeout(() => w.remove(), 20000);
   }
 
-  // Назад 🔙 — закрыть модалку
-  backBtn.addEventListener('click', () => {
-    modalOverlay.classList.remove('active');
-  });
+  for (let i = 0; i < 6; i++) setTimeout(spawnWord, i * 900);
+  setInterval(spawnWord, 1800);
 
-  // Клик по фону — тоже закрыть
-  modalOverlay.addEventListener('click', (e) => {
-    if (e.target === modalOverlay) modalOverlay.classList.remove('active');
-  });
+  // ================== ПОДПИСКА ==================
+  async function getSubscription() {
+    const btn = document.getElementById('getSubBtn');
+    btn.style.opacity = '0.7';
+    btn.disabled = true;
+    try {
+      await navigator.clipboard.writeText(SUB_URL);
+      onSubLoaded();
+    } catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = SUB_URL;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); onSubLoaded(); }
+      catch (err) { alert('Ссылка: ' + SUB_URL); }
+      document.body.removeChild(ta);
+    }
+  }
+
+  function onSubLoaded() {
+    document.getElementById('getSubBtn').style.display = 'none';
+    document.getElementById('actionRow').style.display = 'flex';
+    document.getElementById('successMsg').style.display = 'block';
+    if (!document.getElementById('subLinkBox')) {
+      const box = document.createElement('div');
+      box.id = 'subLinkBox';
+      box.style.cssText = 'margin-top:12px; font-size:11px; color:#8fb8e8; word-break:break-all; text-align:center; padding:8px; background:rgba(0,0,0,0.25); border-radius:8px;';
+      box.textContent = SUB_URL;
+      document.getElementById('successMsg').after(box);
+    }
+    showToast('Ссылка скопирована');
+  }
+
+  async function copySub() {
+    try {
+      await navigator.clipboard.writeText(SUB_URL);
+      showToast('Успешно скопировано');
+    } catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = SUB_URL;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('Успешно скопировано');
+    }
+  }
+
+  function backToMain() {
+    const btn = document.getElementById('getSubBtn');
+    btn.style.display = 'flex';
+    btn.style.opacity = '1';
+    btn.disabled = false;
+    document.getElementById('actionRow').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'none';
+    const link = document.getElementById('subLinkBox');
+    if (link) link.remove();
+  }
+
+  function subscribeTG() {
+    window.open(TG_URL, '_blank');
+    setTimeout(() => showToast('Спасибо!'), 400);
+  }
+
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastText').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  // ================== FALLBACK АВАТАРА ==================
+  const img = document.getElementById('avatarImg');
+  img.onerror = function() {
+    this.style.display = 'none';
+    this.parentElement.style.background =
+      'linear-gradient(135deg, #0a1a4d 0%, #1e90ff 50%, #0a1a4d 100%)';
+    this.parentElement.insertAdjacentHTML('beforeend',
+      '<svg viewBox="0 0 24 24" fill="none" style="position:absolute;inset:0;margin:auto;width:52px;height:52px;filter:drop-shadow(0 0 10px rgba(255,215,0,.9));z-index:2;">' +
+      '<path d="M3 8L7 12L12 5L17 12L21 8L19 19H5L3 8Z" stroke="#ffd700" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>' +
+      '<path d="M5 19H19" stroke="#ffd700" stroke-width="1.5" stroke-linecap="round"/></svg>');
+  };
 </script>
 
 </body>
